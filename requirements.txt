@@ -3,5 +3,3 @@ Flask-PyMongo==2.3.0
 Pillow==10.3.0
 img2vec-pytorch @ git+https://github.com/christiansafka/img2vec.git@8b63ed677327382b5db56dc9b193ca32fd3a8b9f
 pymongo==4.7.3
-bson==4.0.1
-
