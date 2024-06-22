@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Search</title>
+    <style>
+        .image-container {
+            margin-bottom: 20px;
+        }
+        .image-container img {
+            max-width: 200px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>ค้นหารูปภาพ</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <label for="image">อัปโหลดรูปภาพ:</label>
+        <input type="file" id="image" name="image" required>
+        <label for="topic">หัวข้อ:</label>
+        <input type="text" id="topic" name="topic" required>
+        <label for="description">คำอธิบาย:</label>
+        <textarea type="text" id="description" name="description" required></textarea>
+        <button type="submit">อัปโหลด</button>
+    </form>
+
+    <h2>ค้นหารูปภาพที่คล้ายกัน</h2>
+    <form id="search-form" enctype="multipart/form-data">
+        <label for="search-image">รูปภาพสำหรับค้นหา:</label>
+        <input type="file" id="search-image" name="image" required>
+        <button type="submit">ค้นหา</button>
+    </form>
+
+    <h3>ผลการค้นหา:</h3>
+    <div id="results"></div>
+
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            fetch('/upload_image', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ');
+            });
+        });
+
+        document.getElementById('search-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            fetch('/search_image', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                let results = document.getElementById('results');
+                results.innerHTML = '';
+                if (data.results && data.results.length > 0) {
+                    data.results.forEach(item => {
+                        let div = document.createElement('div');
+                        div.classList.add('image-container');
+                        let img = document.createElement('img');
+                        img.src = `data:image/jpeg;base64,${item.image}`;
+                        img.alt = `Filename: ${item.filename}, Description: ${item.description}`;
+                        let filename = document.createElement('p');
+                        filename.textContent = `ชื่อไฟล์: ${item.filename}`;
+                        let topic = document.createElement('p');
+                        topic.textContent = `หัวข้อ: ${item.topic}`;
+                        let description = document.createElement('p');
+                        description.textContent = `คำอธิบาย: ${item.description}`;
+                        div.appendChild(img);
+                        div.appendChild(filename);
+                        div.appendChild(topic);
+                        div.appendChild(description);
+                        results.appendChild(div);
+                    });
+                } else {
+                    results.innerHTML = 'ไม่พบผลลัพธ์';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('เกิดข้อผิดพลาดในการค้นหารูปภาพ');
+            });
+        });
+    </script>
+</body>
+</html>
