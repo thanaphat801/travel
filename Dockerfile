@@ -1,5 +1,5 @@
 # Use the official Python image from the Docker Hub
-FROM python:3.8-slim
+FROM python:3.9.13
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
