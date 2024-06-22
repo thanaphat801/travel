@@ -4,4 +4,4 @@ pillow==8.2.0
 img2vec-pytorch==1.0.0
 bson==0.5.10
 pymongo==3.11.4
-Werkzeug==1.0.1
+Werkzeug==2.0.3
