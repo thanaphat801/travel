@@ -11,8 +11,9 @@ import base64
 
 app = Flask(__name__)
 
-# Setting up MongoDB connection
-app.config['MONGO_URI'] = "mongodb+srv://thaphat:NC2pGmyhxqNpv4wM@templedb.tmtu6rf.mongodb.net/mydatabase?retryWrites=true&w=majority&appName=TempleDB"
+# Setting up MongoDB connection using environment variable
+mongo_uri = os.environ.get('MONGO_URI', "mongodb+srv://thaphat:NC2pGmyhxqNpv4wM@templedb.tmtu6rf.mongodb.net/mydatabase?retryWrites=true&w=majority&appName=TempleDB")
+app.config['MONGO_URI'] = mongo_uri
 mongo = PyMongo(app)
 
 # Select or create collections
